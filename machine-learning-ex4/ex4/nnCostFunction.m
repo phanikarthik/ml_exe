@@ -103,41 +103,27 @@ J = J + ((lambda/(2 * m)) * (sum(sum(Theta1sq(:,2:end),2)) + sum(sum(Theta2sq(:,
 for i = 1:m
 
 	A1 = X(i,:)';        %401 1
-%	printf("sizeof A1 = %d %d\n",size(A1));
 	z2 = Theta1 * A1;    %25 401 401 1 = 25 1
 	A2 = sigmoid(z2);    %25 1
-%	printf("sizeof A2 = %d %d\n",size(A2));
 	A2 = [1;A2];         %26 1
 	z3 = Theta2 * A2;    %10 25 25 1 = 10 1
 	A3 = sigmoid(z3);    %10 1
-%	printf("sizeof A3 = %d %d\n",size(A3));
 	hThetax = A3;        %10 1
 	
-	
-	ybin_single(y(i)) = 1;
-    
-	% actual = y(i,:);
-    
-    % ybin_single(actual) = 1;
-	
+	% ybin_single(y(i)) = 1;
+	ybin_single = ([1:num_labels]==y(i))';
 	
 	d3 = A3 - ybin_single;
-	d2 = (Theta2' * d3) .*[1; sigmoidGradient(z2)]; %(A2 .* (1 - A2));
-	
-	 
+	d2 = (Theta2' * d3) .* [1; sigmoidGradient(z2)]; %(A2 .* (1 - A2));
 	d2 = d2(2:end);
 	
 	trid1 = trid1 + (d2 * A1');
 	trid2 = trid2 + (d3 * A2');
 
  end
-  %printf("size(t1) = %d %d,  size(trid1) = %d %d  ", size(Theta1_grad), size(trid1)); 
+
   Theta1_grad = ((1/m) * trid1);
   Theta2_grad = ((1/m) * trid2);
-  %printf("size(t1) = %d %d,  size(trid1) = %d %d\n", size(Theta1_grad), size(trid1));
-  
-
-
  % ====================== PART 3 ======================
 
 % -------------------------------------------------------------
