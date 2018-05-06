@@ -73,16 +73,14 @@ X = [ones(m, 1) X]; %5000 401 401 25
 
 z2 = X *Theta1';    %25 401 401 5000
 a2 = sigmoid(z2);
-
 a2 = [ones(m,1) a2];
-size(a2);
+
 z3 = a2 * Theta2';
 a3 = sigmoid(z3);
+
 hThetax = a3;
-size(hThetax);
+
 ybin = zeros(m, num_labels);
-%fprintf("---------------------\n")
-size(y);
 ybin_single = zeros(num_labels,1); 
 
 res = zeros(m,1);
@@ -98,8 +96,7 @@ Theta2sq = Theta2 .* Theta2;
 J = J + ((lambda/(2 * m)) * (sum(sum(Theta1sq(:,2:end),2)) + sum(sum(Theta2sq(:,2:end),2))));
  
  % ====================== PART 2 ======================
- %printf("__________________part 2_____________________\n");
- 
+
 for i = 1:m
 
 	A1 = X(i,:)';        %401 1
@@ -114,7 +111,7 @@ for i = 1:m
 	ybin_single = ([1:num_labels]==y(i))';
 	
 	d3 = A3 - ybin_single;
-	d2 = (Theta2' * d3) .* [1; sigmoidGradient(z2)]; %(A2 .* (1 - A2));
+	d2 = (Theta2' * d3) .* (A2 .* (1 - A2));
 	d2 = d2(2:end);
 	
 	trid1 = trid1 + (d2 * A1');
@@ -126,9 +123,11 @@ for i = 1:m
   Theta2_grad = ((1/m) * trid2);
  % ====================== PART 3 ======================
 
-% -------------------------------------------------------------
+ Theta1_grad = Theta1_grad + ((lambda/m) * [zeros(size(Theta1, 1), 1) Theta1(:,2:end)]);
+ Theta2_grad = Theta2_grad + ((lambda/m) * [zeros(size(Theta2, 1), 1) Theta2(:,2:end)]);
 
-% =========================================================================
+
+% =====================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
