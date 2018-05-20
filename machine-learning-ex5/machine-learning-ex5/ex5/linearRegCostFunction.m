@@ -19,8 +19,10 @@ alpha = 1;
 %
 %               You should set J to the cost and grad to the gradient.
 %
+alpha = 1;
 summ = 0;
 hx = 0;
+reg = 0;
 for i = 1:m
 	f = X(i,:);
 	hx = theta' * f';
@@ -32,8 +34,9 @@ end
 J = summ / (2 * m);
 
 
-
-
+reg = sum(theta .* theta) - (theta(1,1) .* theta(1,1));
+reg = lambda/(2*m);
+J = J + reg;
 
 
 [r no_of_features] = size(X);
@@ -66,9 +69,9 @@ J = summ / (2 * m);
 			
 		
 	
- % for k = 2:no_of_features
-      % theta_arr(k,1) = theta_arr(k,1) + (lambda/m)*theta(k,1);
-% end
+  for k = 2:no_of_features
+       theta_arr(k,1) = theta_arr(k,1) + (lambda/m)*theta(k,1);
+ end
   
   theta = theta_arr;
 	grad = theta;
